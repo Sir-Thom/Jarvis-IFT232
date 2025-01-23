@@ -2,24 +2,32 @@ package jarvis.atoms;
 
 import jarvis.interpreter.JarvisInterpreter;
 
-public class BoolAtom extends AbstractAtom{
+public class BoolAtom extends AbstractAtom {
 
-	private boolean value;
-	
+	protected boolean value;
+
 	public BoolAtom(boolean v) {
 		value = v;
 	}
-	
+
 	@Override
-	public AbstractAtom interpretNoPut(JarvisInterpreter ji) {		
-		
+	public AbstractAtom interpretNoPut(JarvisInterpreter ji) {
+
 		return this;
 	}
 
 	@Override
 	public String makeKey() {
-		
-		return ""+value;
+
+		return "" + value;
 	}
+
+	public boolean getValue() {
+	
+		boolean val = value;
+		return val;
+	}
+
+	
 
 }
