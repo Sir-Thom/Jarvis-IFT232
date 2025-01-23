@@ -35,7 +35,7 @@
     !(absCondition condition x)
 }
 !ref abs
-g
+
 #Fonction de création de la classe Rectangle
 !{.
 
