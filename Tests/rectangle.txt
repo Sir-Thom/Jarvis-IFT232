@@ -2,10 +2,40 @@
 !load JarvisLib/util.txt
 !mute
 
+# init pour faire -1
+!(int new 1)
+!ref k1
+!(int new 2)
+!ref k2
+!(k1 - k2)
+!ref k
 
+#branch true: si nb négatif fait x * -1
+!{ x .
+    !(x * k)
+}
+!ref negate
 
+# branch false: retourne lui-même
+!{ x .
+    x
+}
+!ref identity
 
+!(ifelse new negate identity)
+# func abs
+!ref absCondition
+!{ x .
+    !(x < 0)
+    !ref isNegative
 
+    !(isNegative value)
+    !ref condition
+
+    !(absCondition condition x)
+}
+!ref abs
+g
 #Fonction de création de la classe Rectangle
 !{.
 
@@ -16,6 +46,10 @@
 		!ref y1
 		!(self y2)
 		!(!a - y1)
+		!ref h
+		h
+		abs
+
 	}
 	!ref fonctionHauteur
 		
@@ -27,6 +61,9 @@
 		!ref x1
 		!(self x2)
 		!(!a - x1)
+		!ref l
+        l
+        abs
 	}
 	!ref fonctionLargeur	
 	
