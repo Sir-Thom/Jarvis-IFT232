@@ -11,7 +11,7 @@ public abstract class BooleanPrimitiveOperation extends PrimitiveOperationAtom {
 
 
     protected void init() {
-        argCount = 0;
+        argCount =0;
     }
 
     protected abstract AbstractAtom calculateResult(JarvisInterpreter ji, BoolAtom val1, BoolAtom val2);

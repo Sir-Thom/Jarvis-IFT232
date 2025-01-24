@@ -31,7 +31,7 @@
 #OPERATIONSPRIMITIVES
 #d�finition incompl�te de la classe bool.
 ("value")
-["!" _booleanTypePrimitive "&&" _booleanANDPrimitive "||" _booleanORPrimitive]
+["!" _booleanNOTPrimitive "&&" _booleanANDPrimitive "||" _booleanORPrimitive]
 !(Class new)
 !ref bool
 

@@ -16,6 +16,11 @@ public class BooleanPrimitiveOR extends BooleanPrimitiveOperation {
 
 		return "BooleanPrimitiveOR";
 	}
+	
+	@Override
+	protected void init() {
+		argCount = -1;
+	}
 
 	@Override
 	protected AbstractAtom calculateResult(JarvisInterpreter ji, BoolAtom val1, BoolAtom val2) {
