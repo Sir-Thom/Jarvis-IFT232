@@ -1,0 +1,46 @@
+!{ .
+"Method1"
+!p
+!c
+!(self x)
+!p
+!c
+!(self y)
+!p
+!c
+}
+!ref method1
+
+("x" "y")
+[ "f" method1]
+()
+!(Class new)
+!ref Point
+
+!(Point new 42 101)
+!ref unPoint
+!(unPoint f)
+
+!{ .
+"Method2"
+!p
+!c
+!(self y)
+!p
+!c
+!(self x)
+!p
+!c
+}
+!ref method2
+
+("x" "y")
+[ "g" method2]
+(Point)
+!(Class new)
+!ref PointEnfant
+
+!(PointEnfant new 50 137)
+!ref unPointEnfant
+!(unPointEnfant g)
+!(unPointEnfant f)
