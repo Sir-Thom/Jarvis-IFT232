@@ -29,9 +29,7 @@
 	("description")
 	
 	["son" sonFonction "manger" mangerFonction]
-	
-	
-	
+	()
 	!(Class new)
 }
 !a
@@ -43,23 +41,23 @@
 	!{.
 		"Meow"
 	}
-	!ref sonFonction	
-	
-	
+	!ref sonFonction
+
+
 	!{.
 		!(self age)
 		!(int new)
 		!(!a * 4)
-		!(!a value)		
+		!(!a value)
 	}
 	!ref fonctionAgeHumain
-	
+
 	("description" "age")
-	
+
 	["son" sonFonction "ageHumain" fonctionAgeHumain]
-	
-	
-	
+
+
+	(Felin)
 	!(Class new)
 }
 !a
@@ -67,12 +65,12 @@
 
 #Définition de la classe Chat Domestique
 !{.
-	
+
 	("description" "age" "nom")
-	
-	[]	
-	
-	
+
+	[]
+
+	(Chat)
 	!(Class new)
 }
 !a
@@ -82,7 +80,6 @@
 #Tests avec Félin
 !(Felin new "Ceci-est-un-félin")
 !ref lefelin
-
 !(lefelin description)
 !p
 !c
@@ -97,7 +94,6 @@
 #Tests avec Chat
 !(Chat new "Ceci-est-un-chat" 8)
 !ref lechat
-
 !(lechat description)
 !p
 !c

@@ -23,7 +23,7 @@ public class ObjectAtom extends AbstractAtom {
 	 */
 	public static final int ATTRIBUTE_FIELD =0;
 	public static final int METHOD_FIELD =1;
-	
+	public static final int SUPER_FIELD =2;
 	/*
 	 * Référence à la classe de cet objet.
 	 */
@@ -74,43 +74,62 @@ public class ObjectAtom extends AbstractAtom {
 	 * Pour implanter l'héritage, cet algorithme doit nécessairement être modifié.
 	 */	
 	public AbstractAtom message(AbstractAtom selector) {
-		
-		
+
+
 		//Va chercher les attributs
-		ListAtom members = (ListAtom) classReference.values.get(ATTRIBUTE_FIELD);
+		ListAtom members =  classReference.getAllAttributes();
 
-		//Vérifie si c'est un attribut 
+		//Vérifie si c'est un attribut
 		int pos = members.find(selector);
-		
-		
-		if (pos == -1) {
-			// pas un attribut...
-			// Va chercher les méthodes
-			DictionnaryAtom methods = (DictionnaryAtom) classReference.values
-					.get(METHOD_FIELD);
 
-			// Cherche dans le dictionnaire
-			AbstractAtom res = methods.get(selector.makeKey());
 
-			if (res == null) {
-				
-				// Rien ne correspond au message
-				return new StringAtom("ComprendPas "+ selector);
-			} else {
-				//C'est une méthode.
-				return res;
-			}
 
-		}
-
-		else {
-			//C'est un attribut.
+		if (pos != -1) {
+			//C'est un attribut
 			return values.get(pos);
+
+
+		} else {
+			AbstractAtom res = classReference.findMethod(selector);
+			if (res != null) {
+				//C'est une méthode
+				return res;
+			} else {
+				//Erreur
+				throw new IllegalArgumentException("ObjectAtom: no such method or attribute: "+selector.makeKey());
+			}
 		}
 	}
 
+	private AbstractAtom findMethod(AbstractAtom selector) {
+		// pas un attribut...
+		// Va chercher les méthodes
+		DictionnaryAtom methods = (DictionnaryAtom) values
+				.get(METHOD_FIELD);
+
+		// Cherche dans le dictionnaire
+		AbstractAtom res = methods.get(selector.makeKey());
+		//super...?
+		if (res == null) {
+			ListAtom superRefList = (ListAtom) values.get(SUPER_FIELD);
+			// if the list is empty, we have no superclass
+			if (superRefList != null && !superRefList.isEmpty()) {
+				ObjectAtom superRef = (ObjectAtom) superRefList.get(0); // Extract the superclass from the ListAtom
+				if (superRef != null) {
+					res = superRef.findMethod(selector);
+				}
+			}
+		}
+
+		return res;
+	}
+
+
 	public void setClass(ObjectAtom theClass) {
 		classReference = theClass;
+	}
+	private ListAtom getAllAttributes() {
+		return (ListAtom) values.get(ATTRIBUTE_FIELD);
 	}
 
 	
