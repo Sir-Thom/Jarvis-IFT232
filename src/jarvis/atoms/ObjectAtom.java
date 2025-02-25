@@ -133,32 +133,30 @@ public class ObjectAtom extends AbstractAtom {
 	public ListAtom getAllAttributes() {
 	    ListAtom allAttributes = new ListAtom();
 	    
-	    // Attributs de la classe courante
+	    // Ajouter les attributs de la classe courante
 	    ListAtom currentAttributes = (ListAtom) values.get(ATTRIBUTE_FIELD);
 	    for (int i = 0; i < currentAttributes.size(); i++) {
 	        allAttributes.add(currentAttributes.get(i));
 	    }
 	    
-	    // Attributs des superclasses
+	    // Ajouter les attributs des superclasses (exclure Object)
 	    ListAtom superClasses = (ListAtom) values.get(SUPER_FIELD);
 	    if (superClasses != null && !superClasses.isEmpty()) {
-	        ObjectAtom superClass = (ObjectAtom) superClasses.get(0); // Prend la première superclasse
-	        ListAtom superAttributes = superClass.getAllAttributes();
-	        
-	        for (int j = 0; j < superAttributes.size(); j++) {
-	            AbstractAtom superAttr = superAttributes.get(j);
-	            boolean exists = false;
-	            
-	            // Vérifie les doublons
-	            for (int k = 0; k < allAttributes.size(); k++) {
-	                if (allAttributes.get(k).makeKey().equals(superAttr.makeKey())) {
-	                    exists = true;
-	                    break;
+	        ObjectAtom superClass = (ObjectAtom) superClasses.get(0);
+	        if (!superClass.equals(ji.getEnvironment().get("Object"))) { // Exclure Object
+	            ListAtom superAttributes = superClass.getAllAttributes();
+	            for (int j = 0; j < superAttributes.size(); j++) {
+	                AbstractAtom superAttr = superAttributes.get(j);
+	                boolean exists = false;
+	                for (int k = 0; k < allAttributes.size(); k++) {
+	                    if (allAttributes.get(k).makeKey().equals(superAttr.makeKey())) {
+	                        exists = true;
+	                        break;
+	                    }
 	                }
-	            }
-	            
-	            if (!exists) {
-	                allAttributes.add(superAttr);
+	                if (!exists) {
+	                    allAttributes.add(superAttr);
+	                }
 	            }
 	        }
 	    }

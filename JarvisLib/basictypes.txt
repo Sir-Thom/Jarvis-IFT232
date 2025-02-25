@@ -1,12 +1,12 @@
 
 #H�RITAGE: il manque la classe Object.
 # Vous devriez la d�finir ici.
-("attributes" "methods" "super")
+# Définition de la classe Object sans attributs d'instance
+()
 []
 ()
 !(Class new)
 !ref Object
-
 
 #Classe servant � faire des conditions
 ("true" "false")
