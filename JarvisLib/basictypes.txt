@@ -1,39 +1,33 @@
 
-!mute
-
 #H�RITAGE: il manque la classe Object.
 # Vous devriez la d�finir ici.
-
-
-
-#MUTATEUR: c'est une fonctionnalit� 
-#de base de tous les objets...
-
-
-
-
+("attributes" "methods" "super")
+[]
+()
+!(Class new)
+!ref Object
 
 
 #Classe servant � faire des conditions
 ("true" "false")
 []
 
+(Object)
 !(Class new)
 !ref ifelse
 
-#OPERATIONSPRIMITIVES
+
 #d�finition incompl�te del a classe int.
 ("value")
 ["+" _integerAddPrimitive "-" _integerSubtractPrimitive "*" _integerMultiplyPrimitive "==" _integerEqualsPrimitive "<" _integerLessPrimitive ">" _integerMorePrimitive]
+(Object)
 !(Class new)
 !ref int
 
-#OPERATIONSPRIMITIVES
 #d�finition incompl�te de la classe bool.
 ("value")
 ["!" _booleanNOTPrimitive "&&" _booleanANDPrimitive "||" _booleanORPrimitive]
+(Object)
 !(Class new)
 !ref bool
-
-
 
