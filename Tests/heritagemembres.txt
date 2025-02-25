@@ -3,12 +3,12 @@
 
 !mute
 
-#Attention! Vous devez modifier ce test pour établir le lien d'héritage entre les classes.
-#L'écriture peut varier selon votre implémentation.
-#D'autres tests devront être modifiés après que l'héritage ait été défini.
-#N'oubliez pas de modifier rétroactivement vos autres tests.
+#Attention! Vous devez modifier ce test pour ï¿½tablir le lien d'hï¿½ritage entre les classes.
+#L'ï¿½criture peut varier selon votre implï¿½mentation.
+#D'autres tests devront ï¿½tre modifiï¿½s aprï¿½s que l'hï¿½ritage ait ï¿½tï¿½ dï¿½fini.
+#N'oubliez pas de modifier rï¿½troactivement vos autres tests.
 
-#Définition de la classe Félin
+#Dï¿½finition de la classe Fï¿½lin
 !{.
 
 	!{.
@@ -26,14 +26,14 @@
 	
 	["son" sonFonction "manger" mangerFonction]
 	
-	Object
+	(Object)
 	
 	!(Class new)
 }
 !a
 !ref Felin
 
-#Définition de la classe Chat
+#Dï¿½finition de la classe Chat
 !{.
 
 	!{.
@@ -54,25 +54,22 @@
 	
 	["son" sonFonction "ageHumain" fonctionAgeHumain]
 	
-	Felin
+	(Felin)
 	
 	!(Class new)
 }
 !a
 !ref Chat
 
-#Définition de la classe Chat Domestique
+#Dï¿½finition de la classe Chat Domestique
 !{.
 
-	
-	
-	
 	
 	("nom")
 	
 	[]
 	
-	Chat
+	(Chat)
 	
 	!(Class new)
 }
@@ -80,8 +77,8 @@
 !ref ChatDom
 
 
-#Tests avec Félin
-!(Felin new "Ceci-est-un-félin")
+#Tests avec Fï¿½lin
+!(Felin new "Ceci-est-un-fï¿½lin")
 !ref lefelin
 
 !(lefelin description)

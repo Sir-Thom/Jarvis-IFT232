@@ -133,17 +133,11 @@ public class ObjectAtom extends AbstractAtom {
 	public ListAtom getAllAttributes() {
 	    ListAtom allAttributes = new ListAtom();
 	    
-	    // Ajouter les attributs de la classe courante
-	    ListAtom currentAttributes = (ListAtom) values.get(ATTRIBUTE_FIELD);
-	    for (int i = 0; i < currentAttributes.size(); i++) {
-	        allAttributes.add(currentAttributes.get(i));
-	    }
-	    
 	    // Ajouter les attributs des superclasses (exclure Object)
 	    ListAtom superClasses = (ListAtom) values.get(SUPER_FIELD);
 	    if (superClasses != null && !superClasses.isEmpty()) {
 	        ObjectAtom superClass = (ObjectAtom) superClasses.get(0);
-	        if (!superClass.equals(ji.getEnvironment().get("Object"))) { // Exclure Object
+	        if (!superClass.equals(ji.getEnvironment().get("Object"))) {
 	            ListAtom superAttributes = superClass.getAllAttributes();
 	            for (int j = 0; j < superAttributes.size(); j++) {
 	                AbstractAtom superAttr = superAttributes.get(j);
@@ -160,9 +154,28 @@ public class ObjectAtom extends AbstractAtom {
 	            }
 	        }
 	    }
+	    
+	    // Ajouter les attributs de la classe courante en remplaçant les doublons
+	    ListAtom currentAttributes = (ListAtom) values.get(ATTRIBUTE_FIELD);
+	    for (int i = 0; i < currentAttributes.size(); i++) {
+	        AbstractAtom currentAttr = currentAttributes.get(i);
+	        int existingIndex = -1;
+	        for (int k = 0; k < allAttributes.size(); k++) {
+	            if (allAttributes.get(k).makeKey().equals(currentAttr.makeKey())) {
+	                existingIndex = k;
+	                break;
+	            }
+	        }
+	        if (existingIndex != -1) {
+	            // Remplacer l'attribut existant par celui de la sous-classe
+	         //   allAttributes.set(existingIndex, currentAttr); // pour mutateur
+	        } else {
+	            allAttributes.add(currentAttr);
+	        }
+	    }
+	    
 	    return allAttributes;
 	}
-
 	
 	
 	//Surtout utile pour l'affichage dans ce cas-ci...
@@ -195,6 +208,10 @@ public class ObjectAtom extends AbstractAtom {
 		
 		return ji.getEnvironment().reverseLookup(classReference);
 		
+	}
+
+	public Object getValues() {
+		return values;
 	}
 
 }

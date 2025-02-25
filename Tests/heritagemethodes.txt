@@ -27,7 +27,7 @@
     ("description")
     
     ["son" sonFonction "manger" mangerFonction]
-    ()  
+    (Object)  
     !(Class new)
 }
 !a
