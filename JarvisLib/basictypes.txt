@@ -3,6 +3,11 @@
 
 #H�RITAGE: il manque la classe Object.
 # Vous devriez la d�finir ici.
+("attributes" "methods" "super")
+[]
+()
+!(Class new)
+!ref Object
 
 
 
@@ -17,7 +22,7 @@
 #Classe servant � faire des conditions
 ("true" "false")
 []
-
+(Object)
 !(Class new)
 !ref ifelse
 
@@ -25,6 +30,7 @@
 #d�finition incompl�te del a classe int.
 ("value")
 ["+" _integerAddPrimitive "-" _integerSubtractPrimitive "*" _integerMultiplyPrimitive "==" _integerEqualsPrimitive "<" _integerLessPrimitive ">" _integerMorePrimitive]
+(Object)
 !(Class new)
 !ref int
 
@@ -32,6 +38,7 @@
 #d�finition incompl�te de la classe bool.
 ("value")
 ["!" _booleanNOTPrimitive "&&" _booleanANDPrimitive "||" _booleanORPrimitive]
+(Object)
 !(Class new)
 !ref bool
 

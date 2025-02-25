@@ -42,8 +42,10 @@ public class ObjectAtom extends AbstractAtom {
 		classReference = theClass;
 
 		values = new ArrayList<AbstractAtom>();
+
+
 		values.addAll(vals);
-		
+
 		this.ji=ji;
 	}
 	
@@ -91,6 +93,7 @@ public class ObjectAtom extends AbstractAtom {
 
 		} else {
 			AbstractAtom res = classReference.findMethod(selector);
+
 			if (res != null) {
 				//C'est une méthode
 				return res;
@@ -101,25 +104,25 @@ public class ObjectAtom extends AbstractAtom {
 		}
 	}
 
+
 	private AbstractAtom findMethod(AbstractAtom selector) {
 		// pas un attribut...
 		// Va chercher les méthodes
-		DictionnaryAtom methods = (DictionnaryAtom) values
-				.get(METHOD_FIELD);
+			DictionnaryAtom methods = (DictionnaryAtom) values.get(METHOD_FIELD);
+			AbstractAtom res = methods.get(selector.makeKey());
 
-		// Cherche dans le dictionnaire
-		AbstractAtom res = methods.get(selector.makeKey());
-		//super...?
-		if (res == null) {
-			ListAtom superRefList = (ListAtom) values.get(SUPER_FIELD);
-			// if the list is empty, we have no superclass
-			if (superRefList != null && !superRefList.isEmpty()) {
-				ObjectAtom superRef = (ObjectAtom) superRefList.get(0); // Extract the superclass from the ListAtom
-				if (superRef != null) {
-					res = superRef.findMethod(selector);
+			if (res == null) {
+				ListAtom superRefList = (ListAtom) values.get(SUPER_FIELD);
+				if (superRefList != null && !superRefList.isEmpty()) {
+					ObjectAtom superRef = (ObjectAtom) superRefList.get(0);
+					if (superRef != null) {
+						res = superRef.findMethod(selector); // Recursively search in superclass
+
+					}
 				}
 			}
-		}
+
+
 
 		return res;
 	}
@@ -161,7 +164,7 @@ public class ObjectAtom extends AbstractAtom {
 	}	
 	
 	public String findClassName(JarvisInterpreter ji){
-		
+
 		return ji.getEnvironment().reverseLookup(classReference);
 		
 	}

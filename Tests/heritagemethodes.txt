@@ -27,9 +27,11 @@
 	
 	
 	("description")
-	
+
 	["son" sonFonction "manger" mangerFonction]
-	()
+
+    (Object)
+
 	!(Class new)
 }
 !a
@@ -55,9 +57,9 @@
 	("description" "age")
 
 	["son" sonFonction "ageHumain" fonctionAgeHumain]
+    (Felin)
 
 
-	(Felin)
 	!(Class new)
 }
 !a
@@ -80,6 +82,7 @@
 #Tests avec Félin
 !(Felin new "Ceci-est-un-félin")
 !ref lefelin
+
 !(lefelin description)
 !p
 !c
@@ -94,6 +97,7 @@
 #Tests avec Chat
 !(Chat new "Ceci-est-un-chat" 8)
 !ref lechat
+
 !(lechat description)
 !p
 !c
