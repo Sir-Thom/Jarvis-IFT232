@@ -108,4 +108,12 @@ public class ListAtom extends AbstractAtom{
 	public boolean isEmpty() {
 		return data.isEmpty();
 	}
+	
+	public void set(int index, AbstractAtom element) {
+        if (index >= 0 && index < data.size()) {
+            data.set(index, element);
+        } else {
+            throw new IndexOutOfBoundsException("Index invalide : " + index);
+        }
+    }
 }

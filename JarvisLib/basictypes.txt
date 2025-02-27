@@ -36,6 +36,6 @@
 
 ()
 ["set" _operatorSetPrimitive]
-()
+(Object)
 !(Class new)
 !ref Object

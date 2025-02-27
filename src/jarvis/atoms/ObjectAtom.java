@@ -168,7 +168,7 @@ public class ObjectAtom extends AbstractAtom {
 	        }
 	        if (existingIndex != -1) {
 	            // Remplacer l'attribut existant par celui de la sous-classe
-	         //   allAttributes.set(existingIndex, currentAttr); // pour mutateur
+	        	allAttributes.set(existingIndex, currentAttr); 
 	        } else {
 	            allAttributes.add(currentAttr);
 	        }
@@ -210,8 +210,8 @@ public class ObjectAtom extends AbstractAtom {
 		
 	}
 
-	public Object getValues() {
-		return values;
-	}
+	  public ArrayList<AbstractAtom> getValues() { // Retourner le type concret
+	        return values;
+	    }
 
 }
