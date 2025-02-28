@@ -11,45 +11,41 @@ public class OperatorNewPrimitive extends PrimitiveOperationAtom{
 
 	/*
 	 * Triche pour pouvoir avoir des arguments variables.
-	 * Le nombre d'arguments nécessaire est déterminé par la taille
-	 * de la liste des attributs de la classe qui crée l'instance.
+	 * Le nombre d'arguments nï¿½cessaire est dï¿½terminï¿½ par la taille
+	 * de la liste des attributs de la classe qui crï¿½e l'instance.
 	 */
 	protected void init() {
 		argCount = -1;
 	}
 	
 	
-	//HÉRITAGE	
+	//Hï¿½RITAGE	
 	/*
 	 * Operator new. 
-	 * Rien de bien mystérieux: Lorsqu'on fabrique un objet
-	 * il suffit de prendre les arguments reçus et de les copier
-	 * un à un dans l'objet qu'on fabrique.
-	 * Devient plus complexe si on hérite les membres d'une autre classe.
+	 * Rien de bien mystï¿½rieux: Lorsqu'on fabrique un objet
+	 * il suffit de prendre les arguments reï¿½us et de les copier
+	 * un ï¿½ un dans l'objet qu'on fabrique.
+	 * Devient plus complexe si on hï¿½rite les membres d'une autre classe.
 	 * 
 	 */
 	@Override
-	protected AbstractAtom execute(JarvisInterpreter ji,ObjectAtom self) {	
-		
-		
-		//Seule une classe peut faire new. Ramasser de la classe combien d'attributs ça prend.
-		
-		ListAtom attributes = (ListAtom)self.message("attributes");
-		
-		ArrayList<AbstractAtom> data = new ArrayList<AbstractAtom>();
-		for(int i=0;i<attributes.size();i++)
-		{
-			if(ji.getArgCount()<=0)
-			{
-				throw new IllegalArgumentException("Operator new: Bad number of arguments. Expected "+attributes.size()+" got "+i);
-			}
-			data.add(ji.getArg());
-		}		
-				
-		ObjectAtom res = new ObjectAtom(self, data,ji);		
-		
-		return res;		
-		
+	protected AbstractAtom execute(JarvisInterpreter ji, ObjectAtom self) {    
+
+	    ListAtom attributes = self.getAllAttributes(); 
+	   
+	    ArrayList<AbstractAtom> data = new ArrayList<AbstractAtom>();
+	    for(int i = 0; i < attributes.size(); i++) {
+	        if(ji.getArgCount() <= 0) {
+	            throw new IllegalArgumentException("Operator new: Bad number of arguments. Expected " + attributes.size() + " got " + i);
+	        }
+	        data.add(ji.getArg());
+	    }
+	    
+
+	    data.add(new ListAtom());  
+	    
+	    ObjectAtom res = new ObjectAtom(self, data, ji);        
+	    return res;        
 	}
 
 	@Override

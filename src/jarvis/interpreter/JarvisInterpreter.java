@@ -12,13 +12,9 @@ import java.util.Queue;
 import java.util.Stack;
 import java.util.StringTokenizer;
 
-import jarvis.atoms.AbstractAtom;
-import jarvis.atoms.CommandAtom;
-import jarvis.atoms.DictionnaryAtom;
-import jarvis.atoms.ListAtom;
-import jarvis.atoms.ObjectAtom;
-import jarvis.atoms.StringAtom;
+import jarvis.atoms.*;
 import jarvis.atoms.primitives.OperatorNewPrimitive;
+import jarvis.atoms.primitives.OperatorSetFunction;
 import jarvis.atoms.primitives.bool.BooleanPrimitiveAND;
 import jarvis.atoms.primitives.bool.BooleanPrimitiveOR;
 import jarvis.atoms.primitives.bool.BooleanPrimitiveNOT;
@@ -138,7 +134,7 @@ public class JarvisInterpreter {
 		environment.put("_booleanANDPrimitive", new BooleanPrimitiveAND());
 		environment.put("_booleanORPrimitive", new BooleanPrimitiveOR());
 		environment.put("_booleanNOTPrimitive", new BooleanPrimitiveNOT());
-		
+		environment.put("_operatorSetPrimitive", new OperatorSetFunction());
 		
 		environment.put("_integerMorePrimitive", new IntegerPrimitiveMore());
 		environment.put("_integerLessPrimitive", new IntegerPrimitiveLess());
@@ -188,6 +184,8 @@ public class JarvisInterpreter {
 		ListAtom members = new ListAtom();
 		members.add(new StringAtom("attributes"));
 		members.add(new StringAtom("methods"));
+		members.add(new StringAtom("super"));
+
 
 		HashMap<String, AbstractAtom> m = new HashMap<String, AbstractAtom>();
 		DictionnaryAtom methods = new DictionnaryAtom(m);
@@ -209,6 +207,8 @@ public class JarvisInterpreter {
 
 		data.add(members);
 		data.add(methods);
+		// à modifier pour l'héritage
+		data.add(new ListAtom());
 
 		ObjectAtom ClassClass = new ObjectAtom(null, data, this);
 

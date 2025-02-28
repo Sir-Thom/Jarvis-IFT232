@@ -6,37 +6,37 @@ import java.util.ArrayList;
 
 /*
  * Cette classe implante l'objet de base.
- * L'interpréteur comprend un objet comme
+ * L'interprï¿½teur comprend un objet comme
  * une simple liste de valeurs.
- * L'organisation de ses données est spécifiée
- * par la classe. Celle-ci peut être retrouvée
+ * L'organisation de ses donnï¿½es est spï¿½cifiï¿½e
+ * par la classe. Celle-ci peut ï¿½tre retrouvï¿½e
  * via le lien classReference.
  */
 public class ObjectAtom extends AbstractAtom {
 
 	/*
-	 * Si vous ajoutez des champs à JarvisClass
-	 * ces constantes doivent le refléter.
-	 * Elles sont utilisées pour retrouver
+	 * Si vous ajoutez des champs ï¿½ JarvisClass
+	 * ces constantes doivent le reflï¿½ter.
+	 * Elles sont utilisï¿½es pour retrouver
 	 * les membres d'une classe.
 	 * 
 	 */
 	public static final int ATTRIBUTE_FIELD =0;
 	public static final int METHOD_FIELD =1;
-	
+	public static final int SUPER_FIELD =2;
 	/*
-	 * Référence à la classe de cet objet.
+	 * Rï¿½fï¿½rence ï¿½ la classe de cet objet.
 	 */
 	private ObjectAtom classReference;
 	private ArrayList<AbstractAtom> values;
 	
-	//Référence utile pour faire des reverse lookup
+	//Rï¿½fï¿½rence utile pour faire des reverse lookup
 	private JarvisInterpreter ji;
 
 	
 
-	// Constructeur d'objet générique
-	// Utilisé comme raccourci par les fonctions tricheuses.
+	// Constructeur d'objet gï¿½nï¿½rique
+	// Utilisï¿½ comme raccourci par les fonctions tricheuses.
 	public ObjectAtom(ObjectAtom theClass, ArrayList<AbstractAtom> vals,JarvisInterpreter ji) {
 
 		classReference = theClass;
@@ -57,63 +57,131 @@ public class ObjectAtom extends AbstractAtom {
 	}
 	
 	
-	//Cas spécial où le selecteur n'est pas encore encapsulé dans un atome
-	//Supporté pour alléger la syntaxe.
+	//Cas spï¿½cial oï¿½ le selecteur n'est pas encore encapsulï¿½ dans un atome
+	//Supportï¿½ pour allï¿½ger la syntaxe.
 	public AbstractAtom message(String selector) {
 		
 		return message(new StringAtom(selector));
 		
 	}
 	
-    //HÉRITAGE
+    //Hï¿½RITAGE
 	//VARIABLESCLASSE
 	/*
 	 * Algorithme de gestion des messages.
-	 * Ce bout de code a pour responsabilité de déterminer si le message
-	 * concerne un attribut ou une méthode. 
-	 * Pour implanter l'héritage, cet algorithme doit nécessairement être modifié.
+	 * Ce bout de code a pour responsabilitï¿½ de dï¿½terminer si le message
+	 * concerne un attribut ou une mï¿½thode. 
+	 * Pour implanter l'hï¿½ritage, cet algorithme doit nï¿½cessairement ï¿½tre modifiï¿½.
 	 */	
 	public AbstractAtom message(AbstractAtom selector) {
-		
-		
+
+
 		//Va chercher les attributs
-		ListAtom members = (ListAtom) classReference.values.get(ATTRIBUTE_FIELD);
+		ListAtom members =  classReference.getAllAttributes();
 
-		//Vérifie si c'est un attribut 
+		//Vï¿½rifie si c'est un attribut
 		int pos = members.find(selector);
-		
-		
-		if (pos == -1) {
-			// pas un attribut...
-			// Va chercher les méthodes
-			DictionnaryAtom methods = (DictionnaryAtom) classReference.values
-					.get(METHOD_FIELD);
 
-			// Cherche dans le dictionnaire
-			AbstractAtom res = methods.get(selector.makeKey());
 
-			if (res == null) {
-				
-				// Rien ne correspond au message
-				return new StringAtom("ComprendPas "+ selector);
-			} else {
-				//C'est une méthode.
-				return res;
-			}
 
-		}
-
-		else {
-			//C'est un attribut.
+		if (pos != -1) {
+			//C'est un attribut
 			return values.get(pos);
+
+
+		} else {
+			AbstractAtom res = classReference.findMethod(selector);
+			if (res != null) {
+				//C'est une mï¿½thode
+				return res;
+			} else {
+				//Erreur
+				throw new IllegalArgumentException("ObjectAtom: no such method or attribute: "+selector.makeKey());
+			}
 		}
 	}
+
+	private AbstractAtom findMethod(AbstractAtom selector) {
+		// pas un attribut...
+		// Va chercher les mï¿½thodes
+		DictionnaryAtom methods = (DictionnaryAtom) values
+				.get(METHOD_FIELD);
+
+		// Cherche dans le dictionnaire
+		AbstractAtom res = methods.get(selector.makeKey());
+		//super...?
+		if (res == null) {
+			ListAtom superRefList = (ListAtom) values.get(SUPER_FIELD);
+			// if the list is empty, we have no superclass
+			if (superRefList != null && !superRefList.isEmpty()) {
+				ObjectAtom superRef = (ObjectAtom) superRefList.get(0); // Extract the superclass from the ListAtom
+				if (superRef != null) {
+					res = superRef.findMethod(selector);
+				}
+			}
+		}
+
+		return res;
+	}
+
 
 	public void setClass(ObjectAtom theClass) {
 		classReference = theClass;
 	}
-
 	
+	
+	public ListAtom getAllAttributes() {
+	    ListAtom allAttributes = new ListAtom();
+	    
+	    if (values.size() > SUPER_FIELD) {
+	        AbstractAtom superField = values.get(SUPER_FIELD);
+	        if (superField instanceof ListAtom) {  
+	            ListAtom superClasses = (ListAtom) superField;
+	            if (!superClasses.isEmpty()) {
+	                AbstractAtom superClassAtom = superClasses.get(0);
+	                if (superClassAtom instanceof ObjectAtom && !superClassAtom.equals(ji.getEnvironment().get("Object"))) {
+	                    ObjectAtom superClass = (ObjectAtom) superClassAtom;
+	                    ListAtom superAttributes = superClass.getAllAttributes();
+	                    for (int j = 0; j < superAttributes.size(); j++) {
+	                        AbstractAtom superAttr = superAttributes.get(j);
+	                        boolean exists = false;
+	                        for (int k = 0; k < allAttributes.size(); k++) {
+	                            if (allAttributes.get(k).makeKey().equals(superAttr.makeKey())) {
+	                                exists = true;
+	                                break;
+	                            }
+	                        }
+	                        if (!exists) {
+	                            allAttributes.add(superAttr);
+	                        }
+	                    }
+	                }
+	            }
+	        }
+	    }
+	    
+	    AbstractAtom attributesField = values.get(ATTRIBUTE_FIELD);
+	    if (attributesField instanceof ListAtom) { 
+	        ListAtom currentAttributes = (ListAtom) attributesField;
+	        for (int i = 0; i < currentAttributes.size(); i++) {
+	            AbstractAtom currentAttr = currentAttributes.get(i);
+	            int existingIndex = -1;
+	            for (int k = 0; k < allAttributes.size(); k++) {
+	                if (allAttributes.get(k).makeKey().equals(currentAttr.makeKey())) {
+	                    existingIndex = k;
+	                    break;
+	                }
+	            }
+	            if (existingIndex != -1) {
+	                allAttributes.set(existingIndex, currentAttr); 
+	            } else {
+	                allAttributes.add(currentAttr);
+	            }
+	        }
+	    }
+	    
+	    return allAttributes;
+	}
 	
 	//Surtout utile pour l'affichage dans ce cas-ci...
 	@Override
@@ -146,5 +214,9 @@ public class ObjectAtom extends AbstractAtom {
 		return ji.getEnvironment().reverseLookup(classReference);
 		
 	}
+
+	  public ArrayList<AbstractAtom> getValues() { // Retourner le type concret
+	        return values;
+	    }
 
 }
