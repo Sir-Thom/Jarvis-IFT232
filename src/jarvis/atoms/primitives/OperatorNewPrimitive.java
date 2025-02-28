@@ -29,27 +29,23 @@ public class OperatorNewPrimitive extends PrimitiveOperationAtom{
 	 * 
 	 */
 	@Override
-	protected AbstractAtom execute(JarvisInterpreter ji,ObjectAtom self) {	
-		
-		
-		//Seule une classe peut faire new. Ramasser de la classe combien d'attributs �a prend.
-		
-		   ListAtom attributes = self.getAllAttributes(); 
-		
-		ArrayList<AbstractAtom> data = new ArrayList<AbstractAtom>();
-		for(int i=0;i<attributes.size();i++)
-		{
-			if(ji.getArgCount()<=0)
-			{
-				throw new IllegalArgumentException("Operator new: Bad number of arguments. Expected "+attributes.size()+" got "+i);
-			}
-			data.add(ji.getArg());
-		}		
-				
-		ObjectAtom res = new ObjectAtom(self, data,ji);		
-		
-		return res;		
-		
+	protected AbstractAtom execute(JarvisInterpreter ji, ObjectAtom self) {    
+
+	    ListAtom attributes = self.getAllAttributes(); 
+	   
+	    ArrayList<AbstractAtom> data = new ArrayList<AbstractAtom>();
+	    for(int i = 0; i < attributes.size(); i++) {
+	        if(ji.getArgCount() <= 0) {
+	            throw new IllegalArgumentException("Operator new: Bad number of arguments. Expected " + attributes.size() + " got " + i);
+	        }
+	        data.add(ji.getArg());
+	    }
+	    
+
+	    data.add(new ListAtom());  
+	    
+	    ObjectAtom res = new ObjectAtom(self, data, ji);        
+	    return res;        
 	}
 
 	@Override

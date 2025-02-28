@@ -133,50 +133,55 @@ public class ObjectAtom extends AbstractAtom {
 	public ListAtom getAllAttributes() {
 	    ListAtom allAttributes = new ListAtom();
 	    
-	    // Ajouter les attributs des superclasses (exclure Object)
-	    ListAtom superClasses = (ListAtom) values.get(SUPER_FIELD);
-	    if (superClasses != null && !superClasses.isEmpty()) {
-	        ObjectAtom superClass = (ObjectAtom) superClasses.get(0);
-	        if (!superClass.equals(ji.getEnvironment().get("Object"))) {
-	            ListAtom superAttributes = superClass.getAllAttributes();
-	            for (int j = 0; j < superAttributes.size(); j++) {
-	                AbstractAtom superAttr = superAttributes.get(j);
-	                boolean exists = false;
-	                for (int k = 0; k < allAttributes.size(); k++) {
-	                    if (allAttributes.get(k).makeKey().equals(superAttr.makeKey())) {
-	                        exists = true;
-	                        break;
+	    if (values.size() > SUPER_FIELD) {
+	        AbstractAtom superField = values.get(SUPER_FIELD);
+	        if (superField instanceof ListAtom) {  
+	            ListAtom superClasses = (ListAtom) superField;
+	            if (!superClasses.isEmpty()) {
+	                AbstractAtom superClassAtom = superClasses.get(0);
+	                if (superClassAtom instanceof ObjectAtom && !superClassAtom.equals(ji.getEnvironment().get("Object"))) {
+	                    ObjectAtom superClass = (ObjectAtom) superClassAtom;
+	                    ListAtom superAttributes = superClass.getAllAttributes();
+	                    for (int j = 0; j < superAttributes.size(); j++) {
+	                        AbstractAtom superAttr = superAttributes.get(j);
+	                        boolean exists = false;
+	                        for (int k = 0; k < allAttributes.size(); k++) {
+	                            if (allAttributes.get(k).makeKey().equals(superAttr.makeKey())) {
+	                                exists = true;
+	                                break;
+	                            }
+	                        }
+	                        if (!exists) {
+	                            allAttributes.add(superAttr);
+	                        }
 	                    }
-	                }
-	                if (!exists) {
-	                    allAttributes.add(superAttr);
 	                }
 	            }
 	        }
 	    }
 	    
-	    // Ajouter les attributs de la classe courante en remplaçant les doublons
-	    ListAtom currentAttributes = (ListAtom) values.get(ATTRIBUTE_FIELD);
-	    for (int i = 0; i < currentAttributes.size(); i++) {
-	        AbstractAtom currentAttr = currentAttributes.get(i);
-	        int existingIndex = -1;
-	        for (int k = 0; k < allAttributes.size(); k++) {
-	            if (allAttributes.get(k).makeKey().equals(currentAttr.makeKey())) {
-	                existingIndex = k;
-	                break;
+	    AbstractAtom attributesField = values.get(ATTRIBUTE_FIELD);
+	    if (attributesField instanceof ListAtom) { 
+	        ListAtom currentAttributes = (ListAtom) attributesField;
+	        for (int i = 0; i < currentAttributes.size(); i++) {
+	            AbstractAtom currentAttr = currentAttributes.get(i);
+	            int existingIndex = -1;
+	            for (int k = 0; k < allAttributes.size(); k++) {
+	                if (allAttributes.get(k).makeKey().equals(currentAttr.makeKey())) {
+	                    existingIndex = k;
+	                    break;
+	                }
 	            }
-	        }
-	        if (existingIndex != -1) {
-	            // Remplacer l'attribut existant par celui de la sous-classe
-	        	allAttributes.set(existingIndex, currentAttr); 
-	        } else {
-	            allAttributes.add(currentAttr);
+	            if (existingIndex != -1) {
+	                allAttributes.set(existingIndex, currentAttr); 
+	            } else {
+	                allAttributes.add(currentAttr);
+	            }
 	        }
 	    }
 	    
 	    return allAttributes;
 	}
-	
 	
 	//Surtout utile pour l'affichage dans ce cas-ci...
 	@Override

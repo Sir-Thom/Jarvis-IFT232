@@ -23,7 +23,7 @@ public class OperatorSetFunction extends PrimitiveOperationAtom {
         }
         String nomAttribut = ((StringAtom) nomAttributAtom).getValue();
 
-        ListAtom attributs = self.getAllAttributes();
+        ObjectAtom classRef = self.getJarvisClass();ListAtom attributs = classRef.getAllAttributes();
         int index = attributs.find(new StringAtom(nomAttribut));
         if (index == -1) {
             throw new IllegalArgumentException("Attribut '" + nomAttribut + "' introuvable.");
